@@ -141,7 +141,8 @@ public:
   SOutBuffStatics SimulateNALLoss (const unsigned char* pSrc,  int iSrcLen);
   // pSrc is pointer to AU buffer or H264 file buffer, iSrcLen is the buffer lenth, 
   // pLossChars is the pointer to input loss characters buffer, iLossCharLen is the buffer lenth
-  SOutBuffStatics SimulateNALLoss (const unsigned char* pSrc,  int iSrcLen, unsigned char* pLossChars, int iLossCharLen);
+  // bResetPos, true, loss from 0 pos in pLossChars; false, pos will be recoded inside
+  SOutBuffStatics SimulateNALLoss (const unsigned char* pSrc,  int iSrcLen, unsigned char* pLossChars, int iLossCharLen, bool bResetPos);
   SLossstatusInfo GetLossStatus ();
 private:
   std::vector<SLostStatics>* GetLossDetail() {return &m_ListSLostSim;};
