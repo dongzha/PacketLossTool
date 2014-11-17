@@ -30,10 +30,10 @@ int main(int argc, const char * argv[]) {
     int iFileSizeInLossFile = 0;
     if (argc<2) {
         fprintf (stderr, "Using following commond line: \n");
-        fprintf (stderr, "1. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iilosscfg testloss.cfg -ol outloss.cfg\n");
-        fprintf (stderr, "2. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iilosscfg testloss.cfg -iloss -1 -1 -1 -1 -1 -1 0 -ol outloss.cfg\n");
+        fprintf (stderr, "1. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -ilosscfg testloss.cfg -olosscfg outloss.cfg\n");
+        fprintf (stderr, "2. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -ilosscfg testloss.cfg -iloss -1 -1 -1 -1 -1 -1 0 -olosscfg outloss.cfg\n");
         fprintf (stderr, "where -1 specifies which type of NAL not loss and non -1 value indicates the NAL is lost according to the input file. SPS, SubSPS, PPS, Prefix, SVCSliceExt, AVCIDRSlice, AVCPSlice, respectivly.\n");
-        fprintf (stderr, "3. [SimulaterFromPLR given by -iloss] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iloss 0 0 0 0 0 0 0 -ol outloss.cfg \n");
+        fprintf (stderr, "3. [SimulaterFromPLR given by -iloss] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iloss 0 0 0 0 0 0 0 -olosscfg outloss.cfg \n");
         fprintf (stderr, "where -iloss gives the PLR of SPS, SubSPS, PPS, Prefix, SVCSliceExt, AVCIDRSlice, AVCPSlice, respectivly.\n");
     }
     for(int j = 1; j<argc; j++) {
@@ -98,10 +98,12 @@ int main(int argc, const char * argv[]) {
                      sSliceLossRatio.iAVCISliceLossRatio/100.0, sSliceLossRatio.iAVCPSliceLossRatio/100.0);
         }
         if(strcmp (argv[j],"-h")==0) {
-            fprintf (stderr, "Using following commond line: \n");
-            fprintf (stderr, "[SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -ilosscfg testloss.cfg -olosscfg outloss.cfg\n");
-            fprintf (stderr, "[SimulaterFromPLR given by -iloss] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iloss 0 0 0 0 0 0 0 -ol outloss.cfg \n");
-            fprintf (stderr, "where -iloss gives the PLRs Percentage of: SPS, SubSPS, PPS, Prefix, SVCSliceExt, AVCIDRSlice, AVCPSlice, respectivly.\n");
+          fprintf (stderr, "Using following commond line: \n");
+          fprintf (stderr, "1. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -ilosscfg testloss.cfg -olosscfg outloss.cfg\n");
+          fprintf (stderr, "2. [SimulaterFromFile testloss.cfg] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -ilosscfg testloss.cfg -iloss -1 -1 -1 -1 -1 -1 0 -olosscfg outloss.cfg\n");
+          fprintf (stderr, "where -1 specifies which type of NAL not loss and non -1 value indicates the NAL is lost according to the input file. SPS, SubSPS, PPS, Prefix, SVCSliceExt, AVCIDRSlice, AVCPSlice, respectivly.\n");
+          fprintf (stderr, "3. [SimulaterFromPLR given by -iloss] PacketLossTool.exe -ib CVPCMNL1_SVA_C.264 -ob out.264 -iloss 0 0 0 0 0 0 0 -olosscfg outloss.cfg \n");
+          fprintf (stderr, "where -iloss gives the PLR of SPS, SubSPS, PPS, Prefix, SVCSliceExt, AVCIDRSlice, AVCPSlice, respectivly.\n");
         }
     }
     CPacketLossSimulator cPacketLoss;
@@ -111,7 +113,7 @@ int main(int argc, const char * argv[]) {
     if (iFileSizeInLossFile>0) {
         // simulate loss according to PLR flie
         cPacketLoss.SetLossRatio(&sSliceLossRatio);
-        sOutBuff = cPacketLoss.SimulateNALLoss(pBufInH264,iFileSizeInH264,pBufInLoss,iFileSizeInLossFile);
+        sOutBuff = cPacketLoss.SimulateNALLoss(pBufInH264,iFileSizeInH264,pBufInLoss,iFileSizeInLossFile, false);
     } else {
         // set PLR
         cPacketLoss.SetLossRatio(&sSliceLossRatio);
